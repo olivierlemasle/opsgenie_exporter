@@ -1,0 +1,14 @@
+apiKey=<api_key>
+apiUrl=api.opsgenie.com
+# apiUrl=api.eu.opsgenie.com
+
+############# Use following configuration options if you use lamp behind a proxy ############
+# proxyHost=<proxy_host>
+# proxyPort=<proxy_port>
+# proxyUsername=<proxy_username>
+# proxyPassword=<proxy_password>
+# proxyProtocol=http
+
+############# Use following settings options for connection to OpsGenie server############
+#connectionTimeout=50
+#requestTimeout=100

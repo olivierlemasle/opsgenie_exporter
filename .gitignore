@@ -1,0 +1,9 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.test
+*.out
+.vscode/
+opsgenie_exporter
+conf/lamp.conf
