@@ -9,3 +9,5 @@ opsgenie_exporter
 .git
 conf
 hooks
+README.md
+LICENSE
