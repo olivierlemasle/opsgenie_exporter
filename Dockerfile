@@ -13,9 +13,13 @@ RUN go mod download
 COPY main.go ./
 COPY pkg pkg
 
+ARG VERSION
+ARG SOURCE_COMMIT
+ARG SOURCE_BRANCH
+
 RUN go install \
     -ldflags=" \
-    -X github.com/prometheus/common/version.Version=${DOCKER_TAG} \
+    -X github.com/prometheus/common/version.Version=${VERSION} \
     -X github.com/prometheus/common/version.Revision=${SOURCE_COMMIT} \
     -X github.com/prometheus/common/version.Branch=${SOURCE_BRANCH} \
     -X github.com/prometheus/common/version.BuildUser=$(whoami)@$(hostname) \
