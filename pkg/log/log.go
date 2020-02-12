@@ -1,4 +1,4 @@
-// Heaviliy inspired by "github.com/prometheus/common/log"
+// Heavily inspired by "github.com/prometheus/common/log"
 
 package log
 
