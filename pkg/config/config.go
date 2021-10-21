@@ -2,14 +2,11 @@ package config
 
 import (
 	"os"
-	"path/filepath"
 
 	configReader "github.com/ccding/go-config-reader/config"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
-
-const sep string = string(filepath.Separator)
 
 var log *logrus.Logger
 var configPath string
@@ -33,8 +30,12 @@ func LoadConfiguration(logger *logrus.Logger) {
 func load(confPath string) {
 	if _, err := os.Stat(confPath); !os.IsNotExist(err) {
 		conf := configReader.NewConfig(confPath)
-		conf.Read()
-		config = conf
+		err = conf.Read()
+		if err == nil {
+			config = conf
+		} else {
+			log.Errorf("Could not read config file: %v", err.Error())
+		}
 	} else {
 		log.Errorf("Could not read config file: %v", err.Error())
 	}

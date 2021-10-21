@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"html/template"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/version"
 	"github.com/sirupsen/logrus"
@@ -78,8 +78,8 @@ func createHTTPServer(collector prometheus.Collector, logger *logrus.Logger) *ht
 	if !*disableExporterMetrics {
 		// Add metrics about the exporter itself
 		registry.MustRegister(
-			prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}),
-			prometheus.NewGoCollector(),
+			collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
+			collectors.NewGoCollector(),
 		)
 		// Instrument the HTTP handler (add promhttp_* metrics)
 		http.Handle(*metricsPath, promhttp.InstrumentMetricHandler(
@@ -90,18 +90,17 @@ func createHTTPServer(collector prometheus.Collector, logger *logrus.Logger) *ht
 		http.Handle(*metricsPath, handler)
 	}
 
-	// Serve index
-	index := `<!DOCTYPE html>
+	// Serve landing page
+	landingPage := []byte(`<!DOCTYPE html>
 			<html>
 			<head><title>Opsgenie Exporter</title></head>
 			<body>
 			<h1>Opsgenie Exporter</h1>
-			<p><a href="{{ .MetricsPath }}">Metrics</a></p>
+			<p><a href="` + *metricsPath + `">Metrics</a></p>
 			</body>
-			</html>`
-	tmpl := template.Must(template.New("webpage").Parse(index))
+			</html>`)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl.Execute(w, struct{ MetricsPath string }{*metricsPath})
+		w.Write(landingPage)
 	})
 
 	// Create HTTP server
