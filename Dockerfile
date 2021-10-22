@@ -1,5 +1,5 @@
 # Step 1: build executable binary
-FROM golang:1.13-alpine as builder
+FROM golang:1.16-alpine as builder
 
 RUN apk add --no-cache git
 
@@ -22,7 +22,7 @@ RUN go install \
     -X github.com/prometheus/common/version.Version=${VERSION} \
     -X github.com/prometheus/common/version.Revision=${SOURCE_COMMIT} \
     -X github.com/prometheus/common/version.Branch=${SOURCE_BRANCH} \
-    -X github.com/prometheus/common/version.BuildUser=$(whoami)@$(hostname) \
+    -X github.com/prometheus/common/version.BuildUser=$(whoami) \
     -X github.com/prometheus/common/version.BuildDate=$(date +%Y%m%d-%T)" \
     .
 
