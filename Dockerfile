@@ -1,8 +1,7 @@
 # Step 1: build executable binary
 FROM golang:1.16-alpine as builder
 
-RUN apk add --no-cache git
-
+ENV CGO_ENABLED=0
 WORKDIR /go/src/app
 
 # Copy only go.mod and go.sum files before downloading modules,
@@ -27,10 +26,12 @@ RUN go install \
     .
 
 # Step 2: build image
-FROM alpine:3
+FROM gcr.io/distroless/static:latest
 
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /go/bin/opsgenie_exporter /usr/bin/opsgenie_exporter
+COPY --from=builder /go/bin/opsgenie_exporter /
+
+USER nobody
 
 EXPOSE 3000
-CMD ["opsgenie_exporter"]
+
+CMD ["/opsgenie_exporter"]
