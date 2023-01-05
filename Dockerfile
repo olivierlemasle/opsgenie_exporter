@@ -1,5 +1,5 @@
 # Step 1: build executable binary
-FROM golang:1.16-alpine as builder
+FROM golang:1.18-alpine as builder
 
 ENV CGO_ENABLED=0
 WORKDIR /go/src/app
